@@ -3,7 +3,7 @@ import {useState} from "react";
 function Todo(){
    
    const [inputData, setInputData] = useState('');
-   const [items, setItems] = useState(new Array());
+   const [items, setItems] = useState([]);
   
     function AddItem(){
         if(inputData){
@@ -15,8 +15,17 @@ function Todo(){
         }
     }
 
-    function DeleteItem(){
-        alert('Item Deleted');
+    function DeleteItem(idx){
+        //alert('Item Deleted');
+         //console.log(idx);
+         const updatedItems = items.filter((items,id)=>{
+           return (id!==idx)
+         })
+         setItems(updatedItems);
+    }
+
+    function RemoveAll(){
+        setItems([]);
     }
     return (
         <div className="main-div">
@@ -29,13 +38,14 @@ function Todo(){
                 </div>
                 <div className="showItem">
                  {items.map((element, idx)=>{
-                   return <div className="eachElement" key={idx}>
-                    <h3>{element}</h3>
-                   </div>
-                 })}
+                     return (<div className="eachElement" key={idx}>
+                    <h3>{element}</h3>   
+                    <button onClick={()=>DeleteItem(idx)}>Delete</button>
+                    </div>
+                    )})}
                 </div>
-                <div className="deleteItem">
-                    <button onClick = {DeleteItem}> Delete </button>
+                <div className="showItem">
+                   <button onClick= {RemoveAll}>Remove All</button>
                 </div>
             </div>
         </div>
