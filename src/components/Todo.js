@@ -1,9 +1,20 @@
-import {useState} from "react";
+import {useState, useEffect} from "react";
+
+function GetLocalStoredItems(){
+
+    let list = localStorage.getItem('ListOfItems');
+    if(list){
+        return JSON.parse(localStorage.getItem('ListOfItems'));
+    } 
+    else{
+        return [];
+    }
+}
 
 function Todo(){
    
    const [inputData, setInputData] = useState('');
-   const [items, setItems] = useState([]);
+   const [items, setItems] = useState(GetLocalStoredItems());
    const [toggleSubmit, setToggleSubmit] = useState(true);
    const [isEditItem, setIsEditItem] = useState(null);
 
@@ -49,6 +60,11 @@ function Todo(){
     function RemoveAll(){
         setItems([]);
     }
+
+    useEffect(() => {
+        localStorage.setItem('ListOfItems',JSON.stringify(items))  
+    }, [items]);
+
     return (
         <div className="main-div">
             <div className="sub-div">
@@ -56,10 +72,9 @@ function Todo(){
                     <input placeholder="Add item"
                     value={inputData}
                     onChange={(e)=>setInputData(e.target.value)}/>
-                    {/* <button onClick = {AddItem}> Add </button> */}
                     {
-                      toggleSubmit ?  <button className="add-btn" title="Add Item" onClick={AddItem}> Add </button>  :
-                      <button className="edit-btn" title="Update Item" onClick={AddItem}> Edit</button>  
+                      toggleSubmit ?  <button onClick={AddItem}> Add </button>  :
+                      <button onClick={AddItem}> Edit</button>  
                     }
                 </div>
                 <div className="showItem">
